@@ -1,23 +1,112 @@
 # Начало обучения. Подготовка к самостоятельной задаче
 
+## Урок 1
 ### Теория
-Клиент-сервер, BE/FE, Git, gitlab/github, Что такое API
+Темы: Клиент-сервер, BE/FE, Что такое API, http, get/post, url/path
+https://habr.com/ru/articles/836464/
+https://elbrusboot.camp/blog/chto-takoie-frontend-i-backend-razrabotka/
+https://skillbox.ru/media/code/chto_takoe_api/
+https://selectel.ru/blog/http-request/
 ### Практика
-Настройка окружения с goland, создать пустой проект в gitlab/github с readme.md, склонить пустой проект себе
+#### Настройка окружения
+Скачиваем Goland с официального сайта https://www.jetbrains.com/ru-ru/go/download/other.html рекомендую 2024.1.4 версию
+Затем следуем инструкции https://telegra.ph/activation-instructions-for-dummies-OSX-09-28
+IDE установлена
+Затем в настройках IDE нужно указать GOROOT и GOPATH
+#### Первый веб сервер на Go
+Пора создать свой первый простой веб сервер. Вот инструкция как это сделать https://codex.so/go-web-server
 
+## Урок 2
 ### Теория
-http, get/post, REST, url/path, postman
+Темы: Фреймворки, Gin, Git, gitlab/github
+https://brainlab.com.ua/blog/chto-takoe-frejmvork-obyasnyaem-prostymi-slovami
+https://gin-gonic.com/ru/docs/
+https://ibs.ru/glosarii/git-github-i-gitlab-upravlenie-versiyami-v-it-razrabotke/
+https://habr.com/ru/articles/918386/
 ### Практика
-Создаем простой веб сервер с одним эндпоинтом "hello world", отправляем запрос через postman
+Создай пустой репозиторий в github (или в gitlab) https://docs.github.com/ru/repositories/creating-and-managing-repositories/creating-a-new-repository
+Затем нужно склонировать репозиторий к себе и открыть его в IDE
+Создай свой первый веб сервер с использованием Gin https://gin-gonic.com/ru/docs/quickstart/
+Теперь когда ты это сделал закоммить свои изменения через git и отправь в удаленный репозиторий
 
+## Урок 3
 ### Теория
-Глобальные переменные, map и slice
+Здесь тебе также понадобятся знания из первого урока про http
+Темы: REST, json, postman
+https://blog.skillfactory.ru/glossary/rest-api/
+https://habr.com/ru/articles/554274/
+https://blog.skillfactory.ru/glossary/postman/
 ### Практика
-Добавляем эндпоинт с сохранением данных в slice
-Второй эндпоинт с сохранением данных в map
-Третий эндпоинтт получаем весь слайс
-Третий эндпоинтт получаем всю map
+В этом уроке созданим несколько простых эндпоинтов (endpoints) ("ручек" на сленге)
+Добавь следующие эндпоинты:
+GET localhost:8080/hello, который вернет json
+```json
+{
+    "message": "world"
+}
+```
+GET localhost:8080/users, который вернет json
+```json
+{
+    "users": [
+      {
+        "name": "Михаил",
+        "age": 28
+      },
+      {
+        "name": "Иван",
+        "age": 15
+      }
+    ]
+}
+```
+Затем настрой postman и отправь запросы на эти эндпоинты https://www.postman.com/
+Посмотри что вернулось и попробуй добавить новые элементы в список, добавить еще эндпоинт и тд
+Закоммить свои изменения через git и отправь в удаленный репозиторий
 
+## Урок 4
+### Теория
+Темы: Глобальные переменные, map и slice, передача данных
+https://golangify.com/variable-scope
+http://golang-book.ru/chapter-06-arrays-slices-maps.html
+https://habr.com/ru/companies/X5Tech/articles/798681/
+https://stepik.org/lesson/844731/step/5?unit=848458
+### Практика
+Создай структуру
+```go
+type Product struct {
+    ID    int    `json:"id"`
+    Name  string `json:"name"`
+    Price int    `json:"price"`
+}
+```
+Затем создай глобальную переменную products, в которой лежит слайс структур Product
+Добавь эндпоинт GET /products, который должен возвращать массив продуктов из переменной products
+```json
+{
+  "products": [
+    {
+      "id": 23,
+      "name": "Автомобиль",
+      "Price": 2400000
+    }
+  ]
+}
+```
+Добавь эндпоинт POST /products, в котором нужно получить из тела запроса структуру Product
+Затем добавь эту структуру в слайс products
+
+Теперь давай получим конкретный продукт из слайса по уникальному идентификатору (id). Для этого нам нужно создать новый
+эндпоинт GET /products/:id. Когда ты перейдешь по ссылке localhost:8080/products/123 ты попадешь на этот эндпоинт.
+Для того чтобы получить значение :id на фреймворке Gin нужно в коде сделать так ```id := c.Param("id")```. 
+Вот тут это описано в документации https://github.com/gin-gonic/gin/blob/master/docs/doc.md#parameters-in-path
+
+Давай добавим еще 1 эндпоинт, который GET /products/filter
+Он должен принимать 1 query параметр: price.
+Нужно получить этот параметр, привести его к числу и найти все продукты в слайсе products, у которых цена равна price.
+Как работать с query параметрами можно посмотреть тут https://github.com/gin-gonic/gin/blob/master/docs/doc.md#querystring-parameters
+
+## Урок 5
 ### Теория
 Валидация входных данных, http коды ответа и управление этим в golang
 ### Практика
